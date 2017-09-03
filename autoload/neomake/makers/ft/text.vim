@@ -88,19 +88,20 @@ function! neomake#makers#ft#text#redpen() abort
           \ }
 endfunction
 
+function! s:redpen_curl_cb(jobinfo) abort dict
+    let format = index(self.fts, 'markdown') != 1 ? 'MARKDOWN' : 'PLAIN'  " would also have WIKI
+    let self.args = ['-s', '--data-urlencode',
+                \ printf('document@%s', fnameescape(neomake#utils#get_fname_for_buffer(a:jobinfo))),
+                \ printf('format=%s', format),
+                \ printf('lang=%s', get(split(&spelllang, ','), 0, 'en')),
+                \ 'http://localhost:8080/rest/document/validate']
+endfunction
+
 function! neomake#makers#ft#text#redpen_curl() abort
           " \ 'postprocess': function('neomake#postprocess#GenericLengthPostprocess'),
-    function! Fn(jobinfo) abort dict
-      let format = index(self.fts, 'markdown') != 1 ? 'MARKDOWN' : 'PLAIN'  " would also have WIKI
-      let self.args = ['-s', '--data-urlencode',
-            \ printf('document@%s', fnameescape(neomake#utils#get_fname_for_buffer(a:jobinfo))),
-            \ printf('format=%s', format),
-            \ printf('lang=%s', get(split(&spelllang, ','), 0, 'en')),
-            \ 'http://localhost:8080/rest/document/validate']
-    endfunction
     return {
           \ 'exe': 'curl',
-          \ 'fn': function('Fn'),
+          \ 'fn': function('s:redpen_curl_cb'),
           \ 'process_output': function('neomake#makers#ft#text#GetEntriesForOutput_Redpen'),
           \ }
 endfunction
