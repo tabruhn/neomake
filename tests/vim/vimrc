@@ -13,7 +13,6 @@ endif
 
 let &runtimepath .= ','.vader_dir
 exe 'source' join([vader_dir, 'plugin', 'vader.vim'], s:slash)
-finish
 
 let s:plugins_dir = join([expand('<sfile>:p:h'), 'plugins', ''], s:slash)
 let s:sourced_plugins = []
