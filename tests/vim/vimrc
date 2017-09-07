@@ -10,9 +10,9 @@ if exists('$TESTS_VADER_DIR')
 else
   let vader_dir = expand('<sfile>:p:h').join(['', 'plugins', 'vader'], s:slash)
 endif
-finish
 
 let &runtimepath .= ','.vader_dir
+finish
 exe 'source' join([vader_dir, 'plugin', 'vader.vim'], s:slash)
 
 let s:plugins_dir = join([expand('<sfile>:p:h'), 'plugins', ''], s:slash)
